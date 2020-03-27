@@ -13,13 +13,42 @@ public class PhoneBookManager {
 		myFriends = new PhoneInfo[size];
 		numOfFriends=0;
 	}
+	
+	public void printMenu() {
+		
+		System.out.println("***메뉴를 선택하세요***");
+		System.out.println("1. 데이터 입력");
+		System.out.println("2. 데이터 검색");
+		System.out.println("3. 데이터 삭제");
+		System.out.println("4. 주소록출력");
+		System.out.println("5. 프로그램 종료");
+		System.out.println("메뉴선택>>>");
 
-	public PhoneBookManager(String name, String phone, String addr) {
-		this.name = name;
-		this.phone = phone;
-		this.birthday = birthday;
+		Scanner scan = new Scanner(System.in);
+		int choice = scan.nextInt();
+
+		switch(choice) {
+		case 1: //데이터입력
+			dataInput(choice);
+			break;
+		case 2:
+			//데이터검색
+			dataSearch();
+			break;
+		case 3:
+			//데이터삭제
+			dataDelete();
+			break;
+		case 4:
+			//주소록출력
+			dataAllShow();
+			break;
+
+		case 5:
+			System.out.println("프로그램을 종료합니다.");
+			return;
+		}
 	}
-
 	
 	public void dataAllShow() {
 		System.out.println("주소록 전체를 출력합니다.");
@@ -27,6 +56,7 @@ public class PhoneBookManager {
 			myFriends[i].showPhoneInfo();
 		}
 		System.out.println("주소록이 출력되었습니다.");
+		printMenu();
 	}
 
 	public void dataInput(int choice) {
@@ -42,9 +72,10 @@ public class PhoneBookManager {
 
 		if (choice==1) {
 
-			PhoneInfo high = new PhoneInfo(iName, iPhone, iBirthday);
-			myFriends[numOfFriends++] = high;
+			PhoneInfo common = new PhoneInfo(iName, iPhone, iBirthday);
+			myFriends[numOfFriends++] = common;
 		}
+		printMenu();
 	}
 
 	
@@ -61,6 +92,7 @@ public class PhoneBookManager {
 
 			}
 		}
+		printMenu();
 	}
 	public void dataDelete() {
 
@@ -89,6 +121,7 @@ public class PhoneBookManager {
 			System.out.println("==데이터("+deleteIndex 
 					+ "번)가 삭제되었습니다==");
 		}
+		printMenu();
 	}
 
 

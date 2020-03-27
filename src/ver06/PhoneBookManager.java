@@ -1,5 +1,6 @@
-package ver04;
+package ver06;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class PhoneBookManager {
@@ -8,20 +9,14 @@ public class PhoneBookManager {
 	PhoneInfo[] myFriends;
 	int numOfFriends=0;
 
-
 	public PhoneBookManager(int size) {
 		myFriends = new PhoneInfo[size];
 		numOfFriends=0;
 	}
 
-	public PhoneBookManager(String name, String phone) {
-		this.name = name;
-		this.phone = phone;
-
-	}
-
 	public void printMenu() {
 
+		try {
 		System.out.println("***메뉴를 선택하세요***");
 		System.out.println("1. 데이터 입력");
 		System.out.println("2. 데이터 검색");
@@ -30,35 +25,53 @@ public class PhoneBookManager {
 		System.out.println("5. 프로그램 종료");
 		System.out.println("메뉴선택>>>");
 
-		Scanner scan = new Scanner(System.in);
+		
+			Scanner scan = new Scanner(System.in);
 
-		int group = scan.nextInt();
-		switch(group) {
-		case 1: 
-			System.out.println("데이터입력을 시작합니다.");
-			System.out.println("1.일반, 2.동창, 3.회사.");
-			int num = scan.nextInt();
+			int group = scan.nextInt();
 
-			dataInput(num);
-			break;//데이터입력				
-		case 2:
-			//데이터검색
-			dataSearch();
-			break;
-		case 3:
-			//데이터삭제
-			dataDelete();
-			break;
-		case 4:
-			//주소록출력
-			dataAllShow();
-			break;
+			if(group<1||group>5) {
+				MenuSelectException mse =
+						new MenuSelectException();
+				throw mse;
+			}
 
-		case 5:
-			System.out.println("프로그램을 종료합니다.");
-			return;
+			switch(group) {
+			case MenuItem.INPUT1 : //데이터입력	
+				System.out.println("데이터입력을 시작합니다.");
+				System.out.println("1.일반, 2.동창, 3.회사.");
+				int num = scan.nextInt();
+
+				dataInput(num);
+				break;			
+			case MenuItem.INPUT2://데이터검색
+
+				dataSearch();
+				break;
+			case MenuItem.INPUT3://데이터삭제
+
+				dataDelete();
+				break;
+			case MenuItem.INPUT4://주소록출력
+				dataAllShow();
+				break;
+
+			case MenuItem.INPUT5:
+				System.out.println("프로그램을 종료합니다.");
+				return;
+			}	
 		}
+		catch (InputMismatchException e) {
+			System.out.println("숫자만 입력 해주세요");
+			printMenu();
+		}
+		catch (MenuSelectException e) {
+			System.out.println("1에서 5까지만 입력하세요.");
+			printMenu();
+		}
+		
 	}
+
 
 
 
@@ -70,21 +83,21 @@ public class PhoneBookManager {
 		System.out.println("주소록이 출력되었습니다.");
 		printMenu();
 	}
-
 	public void dataInput(int choice4) {
 
-		String iName, iPhone,company, major;
+		String iName, iPhone;
+		String company;
 		int year;
-
+		String major;
 		Scanner scan = new Scanner(System.in);
 
 		switch (choice4) {
-		case 1:
+		case SubMenuItem.Input1:
 			System.out.print("이름:");iName = scan.nextLine();
 			System.out.print("전화번호:");iPhone = scan.nextLine();
 			myFriends[numOfFriends++] = new PhoneInfo(iName, iPhone);
 			break;
-		case 2:
+		case SubMenuItem.Input2:
 			System.out.print("이름:");iName = scan.nextLine();
 			System.out.print("전화번호:");iPhone = scan.nextLine();
 			System.out.print("전공:"); major = scan.nextLine();
@@ -93,7 +106,7 @@ public class PhoneBookManager {
 			myFriends[numOfFriends++] = new PhoneSchoolInfo(iName, iPhone, major, year );
 
 			break;
-		case 3:
+		case SubMenuItem.Input3:
 			System.out.print("이름:");iName = scan.nextLine();
 			System.out.print("전화번호:");iPhone = scan.nextLine();
 			System.out.print("회사:"); company = scan.nextLine();
@@ -104,7 +117,6 @@ public class PhoneBookManager {
 		default:
 			break;
 		}
-
 	}
 
 
@@ -120,8 +132,8 @@ public class PhoneBookManager {
 				System.out.println("**귀하가 요청하는 정보를 찾았습니다.**");
 
 			}
+			printMenu();
 		}
-		printMenu();
 	}
 	public void dataDelete() {
 
@@ -152,6 +164,4 @@ public class PhoneBookManager {
 		}
 		printMenu();
 	}
-
-
 }

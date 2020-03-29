@@ -11,7 +11,7 @@ public class PhoneBookManager {
 
 	String name;
 	String phone;
-	HashSet<PhoneInfo> myFriends;
+	HashSet<PhoneInfo> myFriends = new HashSet<PhoneInfo>();
 
 
 
@@ -49,6 +49,7 @@ public class PhoneBookManager {
 				int num = scan.nextInt();
 
 				dataInput(num);
+
 				break;			
 			case MenuItem.INPUT2://데이터검색
 
@@ -79,7 +80,28 @@ public class PhoneBookManager {
 	}
 
 
-	public void dataInput(int choice4) {
+	public void nameCheck(String iName) {
+
+		Iterator<PhoneInfo> itr = myFriends.iterator();
+		while(itr.hasNext()) {
+			PhoneInfo pi = itr.next();
+			Scanner scan = new Scanner(System.in);
+			
+			System.out.print("1.이름이 같습니다 덮어쓰기하실래요? 2.나가기");
+			int nameCheck = scan.nextInt();
+
+			if(nameCheck==1) {
+				if(iName.equals(pi.name)) {
+					itr.remove();
+				}
+			}else if(nameCheck==2) {
+				printMenu();
+			}
+
+		}
+	}
+	
+	public void dataInput(int choice7) {
 
 		String iName, iPhone;
 		String company;
@@ -87,19 +109,21 @@ public class PhoneBookManager {
 		String major;
 		Scanner scan = new Scanner(System.in);
 
-		switch (choice4) {
+		switch (choice7) {
 		case SubMenuItem.Input1:
 			System.out.print("이름:");iName = scan.nextLine();
+			nameCheck(iName);
 			System.out.print("전화번호:");iPhone = scan.nextLine();
 
-
-			PhoneInfo commFreind = new PhoneInfo(iName, iPhone);
-			myFriends.add(commFreind);
+			PhoneInfo compFreind = new PhoneInfo(iName, iPhone);
+			myFriends.add(compFreind);
+			
 
 			break;
 
 		case SubMenuItem.Input2:
 			System.out.print("이름:");iName = scan.nextLine();
+			nameCheck(iName);
 			System.out.print("전화번호:");iPhone = scan.nextLine();
 			System.out.print("전공:"); major = scan.nextLine();
 			System.out.print("학년:"); year = scan.nextInt();
@@ -111,6 +135,7 @@ public class PhoneBookManager {
 
 		case SubMenuItem.Input3:
 			System.out.print("이름:");iName = scan.nextLine();
+			nameCheck(iName);
 			System.out.print("전화번호:");iPhone = scan.nextLine();
 			System.out.print("회사:"); company = scan.nextLine();
 
@@ -122,6 +147,7 @@ public class PhoneBookManager {
 		default:
 			break;
 		}
+		printMenu();
 	}
 
 
@@ -169,7 +195,6 @@ public class PhoneBookManager {
 
 	}
 
-
 	public void dataDelete() {
 
 		Scanner scan = new Scanner(System.in);
@@ -183,8 +208,8 @@ public class PhoneBookManager {
 			if(deleteName4.equals(pi.name)) {
 
 				searchFlag = true;
-				System.out.println(myFriends.remove(deleteName4));
-				
+				itr.remove();
+
 			}
 
 		}

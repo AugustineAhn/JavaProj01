@@ -18,6 +18,7 @@ public class PhonCompanyInfo extends PhoneInfo {
 		return "\n이름: " + name + "전화번호: " + phoneNumber + "회사: " + company;
 	}
 
+	
 	@Override
 	public int hashCode() {
 

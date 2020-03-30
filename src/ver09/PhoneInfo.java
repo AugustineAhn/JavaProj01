@@ -1,52 +1,23 @@
-package ver07;
+package ver09;
 
-import java.io.Serializable;
 import java.util.Scanner;
 
-public class PhoneInfo implements Serializable{
+public class PhoneInfo {
 
+	
+	
 	//멤버변수
 	public String name;
 	String phoneNumber;
+	String birthday;
 
+	
+	public PhoneInfo(String name, String phoneNumber, String birthday) {
 
-
-	public PhoneInfo(String name, String phoneNumber) {
-
-
+				
 		this.name = name;
 		this.phoneNumber = phoneNumber;
-
-	}
-
-	@Override
-	public String toString() {
-
-		return "이름: \n" + name + "전화번호: \n" + phoneNumber;
-	}
-
-	@Override
-	public int hashCode() {
-
-		int hc1 = name.hashCode();
-		int hc2 = name.hashCode();
-		int result = hc1+hc2;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-
-		PhoneInfo pi = (PhoneInfo)obj;
-		if(pi.name.equals(this.name)) {
-					return true;
-		}
-		
-		else {
-					
-			return false;
-		}
-
+		this.birthday = birthday;
 	}
 
 	public void dataInput() {
@@ -54,7 +25,7 @@ public class PhoneInfo implements Serializable{
 		int choice;
 		Scanner scan =new Scanner(System.in);
 
-
+		
 
 		while (true) {
 			System.out.println("선택하세요....");
@@ -66,7 +37,7 @@ public class PhoneInfo implements Serializable{
 			System.out.print("선택: ");
 			choice = scan.nextInt();
 			scan.nextLine();
-
+			
 			if(choice==1) {
 
 				System.out.println("데이터 입력을 시작합니다.");
@@ -76,8 +47,9 @@ public class PhoneInfo implements Serializable{
 				System.out.print("전화번호를 입력하세요 : ");
 				phoneNumber=scan.nextLine();
 
-
-
+				System.out.print("생년월일을 입력하세요 : ");
+				birthday=scan.nextLine();
+				
 				System.out.println("데이터 입력이 완료되었습니다.");
 
 				showPhoneInfo();
@@ -94,8 +66,14 @@ public class PhoneInfo implements Serializable{
 	//정보출력용 메소드
 	public void showPhoneInfo() {
 
-		System.out.println("이름: \n"+ name);
-		System.out.println("전화번호: \n"+ phoneNumber);
+		System.out.println("이름: "+ name);
+		System.out.println("전화번호: "+ phoneNumber);
+		if(birthday==null) {
+			System.out.println("생년월일 입력되지 않음");
+		}
+		else {
+			System.out.println("생년월일: "+ birthday);
+		}
 
 	}
 }

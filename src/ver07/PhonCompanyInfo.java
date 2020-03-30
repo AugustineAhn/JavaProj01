@@ -15,7 +15,7 @@ public class PhonCompanyInfo extends PhoneInfo {
 	@Override
 	public String toString() {
 
-		return "\n이름: " + name + "전화번호: " + phoneNumber + "회사: " + company;
+		return "이름: \n" + name + "전화번호: \n" + phoneNumber + "회사: \n" + company;
 	}
 
 	

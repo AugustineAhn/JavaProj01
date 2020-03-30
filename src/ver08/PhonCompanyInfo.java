@@ -1,34 +1,31 @@
-package ver07;
+package ver08;
 
+public class PhonCompanyInfo extends PhoneInfo {
 
-public class PhoneSchoolInfo extends PhoneInfo {
-
-	String major;
-	int year;
+	String company;
 	
-	public PhoneSchoolInfo(String name, String phoneNumber, String major, int year) {
+	
+	public PhonCompanyInfo(String name, String phoneNumber,String company) {
 		super(name, phoneNumber);
 		
-		this.major=major;
-		this.year=year;
+		this.company=company;
+
 	}
 	
 	@Override
 	public String toString() {
 
-		return "이름: \n" + name + "전화번호: \n" + phoneNumber + 
-				"전공: \n" + major +"학년: \n"+ year;
+		return "\n이름: " + name + "전화번호: " + phoneNumber + "회사: " + company;
 	}
 
+	
 	@Override
 	public int hashCode() {
 
 		int hc1 = name.hashCode();
 		int hc2 = name.hashCode();
 		int hc3 = name.hashCode();
-		int hc4 = name.hashCode();
-		
-		int result = hc1+hc2;
+		int result = hc1+hc2+hc3;
 		return result;
 	}
 
@@ -46,5 +43,6 @@ public class PhoneSchoolInfo extends PhoneInfo {
 		}
 
 	}
+	
 
 }

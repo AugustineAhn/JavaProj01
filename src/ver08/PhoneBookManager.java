@@ -1,23 +1,46 @@
-package ver07;
+package ver08;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Scanner;
 
+import ver08.PhoneInfo;;
 
-
-public class PhoneBookManager {
+public class PhoneBookManager implements MenuItem {
 
 	String name;
 	String phone;
-	HashSet<PhoneInfo> myFriends = new HashSet<PhoneInfo>();
+	HashSet<PhoneInfo> myFriends ;
 
 
 
-	public PhoneBookManager(int size) {
-		myFriends = new HashSet<>(size);
-
+	public PhoneBookManager() {
+		myFriends = new HashSet<PhoneInfo>();
+		try {
+			//역직렬화(복원)을 위한 스트림 생성
+			ObjectInputStream in = 
+				new ObjectInputStream(
+					new FileInputStream("src/ver08/PhoneBook.obj")
+				);
+			
+			while(true) {
+				//저장된 파일에서 정보 1개 읽어오기
+				PhoneInfo friend = (PhoneInfo)in.readObject();
+				//만약 읽어올 정보(객체)가 더이상 없다면 루프 탈출
+				if(friend==null) break;
+				//읽어온 객체를 통해 정보출력
+				
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void printMenu() {
@@ -64,6 +87,7 @@ public class PhoneBookManager {
 				break;
 
 			case MenuItem.INPUT5:
+				saveFriendInfo();
 				System.out.println("프로그램을 종료합니다.");
 				return;
 			}	
@@ -86,7 +110,7 @@ public class PhoneBookManager {
 		while(itr.hasNext()) {
 			PhoneInfo pi = itr.next();
 			Scanner scan = new Scanner(System.in);
-			
+
 			System.out.print("1.이름이 같습니다 덮어쓰기하실래요? 2.나가기");
 			int nameCheck = scan.nextInt();
 
@@ -100,7 +124,7 @@ public class PhoneBookManager {
 
 		}
 	}
-	
+
 	public void dataInput(int choice7) {
 
 		String iName, iPhone;
@@ -111,22 +135,22 @@ public class PhoneBookManager {
 
 		switch (choice7) {
 		case SubMenuItem.Input1:
-			System.out.print("이름:\n");iName = scan.nextLine();
+			System.out.print("이름: \n");iName = scan.nextLine();
 			nameCheck(iName);
-			System.out.print("전화번호:\n");iPhone = scan.nextLine();
+			System.out.print("전화번호: \n");iPhone = scan.nextLine();
 
 			PhoneInfo compFreind = new PhoneInfo(iName, iPhone);
 			myFriends.add(compFreind);
-			
+
 
 			break;
 
 		case SubMenuItem.Input2:
-			System.out.print("이름:\n");iName = scan.nextLine();
+			System.out.print("이름: \n");iName = scan.nextLine();
 			nameCheck(iName);
-			System.out.print("전화번호:\n");iPhone = scan.nextLine();
-			System.out.print("전공:\n"); major = scan.nextLine();
-			System.out.print("학년:\n"); year = scan.nextInt();
+			System.out.print("전화번호: \n");iPhone = scan.nextLine();
+			System.out.print("전공: \n"); major = scan.nextLine();
+			System.out.print("학년: \n"); year = scan.nextInt();
 
 			PhoneSchoolInfo schoolFreind = new PhoneSchoolInfo(iName, iPhone, major, year);
 			myFriends.add(schoolFreind);
@@ -134,10 +158,10 @@ public class PhoneBookManager {
 			break;
 
 		case SubMenuItem.Input3:
-			System.out.print("이름:\n");iName = scan.nextLine();
+			System.out.print("이름: \n");iName = scan.nextLine();
 			nameCheck(iName);
-			System.out.print("전화번호:\n");iPhone = scan.nextLine();
-			System.out.print("회사:\n"); company = scan.nextLine();
+			System.out.print("전화번호: \n");iPhone = scan.nextLine();
+			System.out.print("회사: \n"); company = scan.nextLine();
 
 			PhoneInfo companyFriend = new PhonCompanyInfo(iName, iPhone, company);
 			myFriends.add(companyFriend);
@@ -215,4 +239,32 @@ public class PhoneBookManager {
 		}
 		printMenu();
 	}
+
+
+	public void saveFriendInfo() {
+
+		try {
+			ObjectOutputStream out = new ObjectOutputStream(
+					new FileOutputStream("src/ver08/PhoneBook.obj")
+					);
+
+			//myFriends 객체배열에 저장된 친구의 정보만큼 반복
+			for(PhoneInfo p : myFriends) {
+				//객체배열의 i번째 요소를 파일로 저장
+				out.writeObject(p);
+			}
+			
+			out.writeObject(null);
+			out.close();
+		}
+		catch (Exception e) {
+			System.out.println("예외발생");
+			e.printStackTrace();
+		}		
+	}
+	
+	
+	
+	
+
 }

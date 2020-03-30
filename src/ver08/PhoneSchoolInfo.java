@@ -1,4 +1,4 @@
-package ver07;
+package ver08;
 
 
 public class PhoneSchoolInfo extends PhoneInfo {
@@ -16,7 +16,7 @@ public class PhoneSchoolInfo extends PhoneInfo {
 	@Override
 	public String toString() {
 
-		return "이름: \n" + name + "전화번호: \n" + phoneNumber + 
+		return "이름: \n " + name + "전화번호: \n" + phoneNumber + 
 				"전공: \n" + major +"학년: \n"+ year;
 	}
 

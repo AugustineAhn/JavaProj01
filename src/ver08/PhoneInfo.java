@@ -1,4 +1,4 @@
-package ver07;
+package ver08;
 
 import java.io.Serializable;
 import java.util.Scanner;

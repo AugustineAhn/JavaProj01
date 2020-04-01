@@ -3,9 +3,6 @@ package ver03;
 import java.util.Scanner;
 
 public class PhoneInfo {
-
-	
-	
 	//멤버변수
 	public String name;
 	String phoneNumber;

@@ -2,209 +2,85 @@ package ver09;
 
 import java.sql.SQLException;
 import java.util.Scanner;
-
-
-public class PhoneBookManager extends IConnectimpl {
-	String name;
-	String phone;
-	String birthday;
-	PhoneInfo[] myFriends;
-
-	public int numOfFriends;
-
-	//생성자
-	public PhoneBookManager(int size) {
-		myFriends = new PhoneInfo[size];
-		numOfFriends=0;
-
-		//프로그램시작하면서 매니저생성자 호출하면 오라클에 뉴테이블 생성
-		execute();
+import java.sql.SQLSyntaxErrorException;
+import java.util.InputMismatchException;
 
 
 
+public class PhoneBookManager {
+	
+	IConnectImpl icoimpl = new IConnectImpl();
+	public PhoneBookManager() {
 
+		try {
+
+			String sqlCreateTable = 
+					" create table phonebook_tb( " + 
+							"    \"이름\" NVARCHAR2(20) primary key, " + 
+							"    \"전화번호\" NVARCHAR2(11), " + 
+							"    \"생일\" NVARCHAR2(20) " + 
+							" )";
+			icoimpl.stmt = icoimpl.con.createStatement();
+			icoimpl.rs = icoimpl.stmt.executeQuery(sqlCreateTable);
+			System.out.println("테이블생성됨");
+
+			String sqlNewSequence = 
+					"create sequence seq_phonebook " + 
+							"    increment by 1 " + 
+							"    maxvalue 100 " + 
+							"    minvalue 1 " + 
+							"    nocycle " + 
+							"    nocache ";
+			icoimpl.stmt = icoimpl.con.createStatement();
+			icoimpl.rs = icoimpl.stmt.executeQuery(sqlNewSequence);
+			System.out.println("seq_phonebook 시퀀스 생성됨");
+
+		} catch (SQLSyntaxErrorException e) {
+			System.out.println("기존 테이블을 계속사용합니다.");
+		} catch (SQLException e) {
+		}
 	}
 
-	//쿼리작성 및 실행 메소드
-	public void execute() {
+	final int ADD_DATA = 1;
+	final int SEARCH = 2;
+	final int DELETE = 3;
+	final int SHOW_ALL = 4;
+	final int EXIT = 5;
+	int selectMenu = 0, indexArr=0;
+	Scanner scan = new Scanner(System.in);
+
+	public void printMenu(){
 		try {
-			//3.Statement객체 생성을 위한 메소드 호출
-			stmt = con.createStatement();
-			//4.SQL(쿼리문)문 작성
-			String sql = "INSERT INTO member VALUES"
-					+"('홍길동', '555','yy/mm/dd')"; 
-					//sequence 생성
+			while(true) {
+				System.out.println("선택하세요...\n"
+						+ "1. 데이터 입력\n"
+						+ "2. 데이터 검색\n"
+						+ "3. 데이터 삭제\n"
+						+ "4. 주소록 출력\n"
+						+ "5. 프로그램 종료\n");
 
+				selectMenu = scan.nextInt();								
+				scan.nextLine();
 
-
-
-
-			//테이블 생성
-
-			
-			//입력
-
-			//검색
-
-			//삭제
-
-			//5.쿼리실행 및 결과값 반환
-			/*
-			 executeUpdate(): 쿼리문이 insert/update/delete와 같이
-			 	기존 레코드에 영향을 미치는 쿼리를 실행할때 사용한다.
-			 	실행 후 영향을 받은 행의 갯수(int)가 반환된다.
-
-			 excuteQuery():쿼리문이 select일때 호출하는 메소드로
-			 	레코드에 영향을 미치지않는 쿼리를 실행한다. 즉,
-			 	조회만 진행하고, 반환타입은 ResultSet이다.
-			 */
-			int affected = stmt.executeUpdate(sql);
-			System.out.println(affected+"행이 입력되었습니다.");
-
-		}
-		catch(SQLException e) {
-			System.out.println("쿼리실행에 문제가 발생하였습니다.");
+				if( selectMenu<1 || selectMenu>5 ) 
+					System.out.println("1~5메뉴중 선택하세요");
+				else {
+					switch (selectMenu) {
+					case ADD_DATA:	new InsertSQL().execute();	break;
+					case SEARCH:	new SearchSQL().execute();	break;
+					case DELETE:	new DeleteSQL().execute();	break;
+					case SHOW_ALL:	new ShowAllSQL().execute();	break;
+					case EXIT:
+						icoimpl.close();
+						System.out.println("프로그램 종료합니다.");
+						System.exit(0);
+					}	
+				}
+			}
+		} catch (InputMismatchException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		finally {
-			//6.자원반납
-			close();
-		}
-	}//end of execute
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/*
-	public void printMenu() {
-
-		System.out.println("***메뉴를 선택하세요***");
-		System.out.println("1. 데이터 입력");
-		System.out.println("2. 데이터 검색");
-		System.out.println("3. 데이터 삭제");
-		System.out.println("4. 주소록출력");
-		System.out.println("5. 프로그램 종료");
-		System.out.println("메뉴선택>>>");
-
-		Scanner scan = new Scanner(System.in);
-		int choice = scan.nextInt();
-
-		switch(choice) {
-		case 1: //데이터입력
-			dataInput(choice);
-			break;
-		case 2:
-			//데이터검색
-			dataSearch();
-			break;
-		case 3:
-			//데이터삭제
-			dataDelete();
-			break;
-		case 4:
-			//주소록출력
-			dataAllShow();
-			break;
-
-		case 5:
-			System.out.println("프로그램을 종료합니다.");
-			return;
-		}
 	}
-
-	public void dataAllShow() {
-		System.out.println("주소록 전체를 출력합니다.");
-		for(int i=0;i<numOfFriends;i++) {
-			myFriends[i].showPhoneInfo();
-		}
-		System.out.println("주소록이 출력되었습니다.");
-		printMenu();
-	}
-
-	public void dataInput(int choice) {
-
-		Scanner scan = new Scanner(System.in);
-
-		String iName, iPhone, iBirthday;
-
-		System.out.print("이름:");iName = scan.nextLine();
-		System.out.print("전화번호:");iPhone = scan.nextLine();
-		System.out.print("생일:");iBirthday = scan.nextLine();
-
-
-		if (choice==1) {
-
-			PhoneInfo common = new PhoneInfo(iName, iPhone, iBirthday);
-			myFriends[numOfFriends++] = common;
-		}
-		printMenu();
-	}
-
-
-	public void dataSearch() {
-		Scanner scan = new Scanner(System.in);
-		System.out.print("검색할 이름을 입력하세요:");
-		String searchName = scan.nextLine();
-
-		for (int i = 0; i < numOfFriends; i++) {
-			if (searchName.compareTo(myFriends[i].name)==0) {
-				myFriends[i].showPhoneInfo();
-
-				System.out.println("**귀하가 요청하는 정보를 찾았습니다.**");
-
-			}
-		}
-		printMenu();
-	}
-	public void dataDelete() {
-
-		Scanner scan = new Scanner(System.in);
-		System.out.println("삭제할 이름을 입력하세요:");
-		String deleteName = scan.nextLine();
-
-
-		int deleteIndex = -1;
-
-		for (int i = 0; i < numOfFriends; i++) {
-			if (deleteName.compareTo(myFriends[i].name)==0) {
-				myFriends[i] = null;
-				deleteIndex = i;
-				numOfFriends--;
-			}
-		}
-		if (deleteIndex==-1) {
-			System.out.println("==삭제된 데이터가 없습니다.");
-		} else {
-
-			for (int i = deleteIndex; i < numOfFriends; i++) {
-				myFriends[i] = myFriends[i+1];
-
-			}
-			System.out.println("==데이터("+deleteIndex 
-					+ "번)가 삭제되었습니다==");
-		}
-		printMenu();
-	}
-
-	 */
 }

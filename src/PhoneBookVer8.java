@@ -10,7 +10,10 @@ public class PhoneBookVer8 {
 
 
 		PhoneBookManager manager =new PhoneBookManager();
+		
 		manager.printMenu();
+
+
 
 
 	}

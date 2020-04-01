@@ -67,9 +67,9 @@ public class PhoneBookManager {
 		}
 		catch (MenuSelectException e) {
 			System.out.println("1에서 5까지만 입력하세요.");
-			printMenu();
+			
 		}
-		
+		printMenu();
 	}
 
 
@@ -81,6 +81,7 @@ public class PhoneBookManager {
 			myFriends[i].showPhoneInfo();
 		}
 		System.out.println("주소록이 출력되었습니다.");
+		
 		printMenu();
 	}
 	public void dataInput(int choice4) {
@@ -97,6 +98,7 @@ public class PhoneBookManager {
 			System.out.print("전화번호:");iPhone = scan.nextLine();
 			myFriends[numOfFriends++] = new PhoneInfo(iName, iPhone);
 			break;
+			
 		case SubMenuItem.Input2:
 			System.out.print("이름:");iName = scan.nextLine();
 			System.out.print("전화번호:");iPhone = scan.nextLine();
@@ -106,6 +108,7 @@ public class PhoneBookManager {
 			myFriends[numOfFriends++] = new PhoneSchoolInfo(iName, iPhone, major, year );
 
 			break;
+			
 		case SubMenuItem.Input3:
 			System.out.print("이름:");iName = scan.nextLine();
 			System.out.print("전화번호:");iPhone = scan.nextLine();
@@ -117,6 +120,7 @@ public class PhoneBookManager {
 		default:
 			break;
 		}
+		printMenu();
 	}
 
 
@@ -124,7 +128,12 @@ public class PhoneBookManager {
 		Scanner scan = new Scanner(System.in);
 		System.out.print("검색할 이름을 입력하세요:");
 		String searchName4 = scan.nextLine();
-
+		
+		
+		System.out.println(numOfFriends+"numOfFriends");
+		
+		
+		
 		for (int i = 0; i < numOfFriends; i++) {
 			if (searchName4.compareTo(myFriends[i].name)==0) {
 				myFriends[i].showPhoneInfo();
@@ -132,8 +141,9 @@ public class PhoneBookManager {
 				System.out.println("**귀하가 요청하는 정보를 찾았습니다.**");
 
 			}
-			printMenu();
+			
 		}
+		printMenu();
 	}
 	public void dataDelete() {
 
@@ -142,25 +152,24 @@ public class PhoneBookManager {
 		String deleteName4 = scan.nextLine();
 
 
-		int deleteIndex = -1;
+		
 
 		for (int i = 0; i < numOfFriends; i++) {
 			if (deleteName4.compareTo(myFriends[i].name)==0) {
 				myFriends[i] = null;
-				deleteIndex = i;
 				numOfFriends--;
+				
+				
+				int deleteIndex = -1;
+				for (int j = deleteIndex; j < numOfFriends; j++) {
+					myFriends[j] = myFriends[j+1];
+				}
+				System.out.println("==데이터("+deleteIndex+ "번)가 삭제되었습니다==");
+				//삭제할 이름으로  배열의 이름을 찾을경우
 			}
-		}
-		if (deleteIndex==-1) {
-			System.out.println("==삭제된 데이터가 없습니다.");
-		} else {
-
-			for (int i = deleteIndex; i < numOfFriends; i++) {
-				myFriends[i] = myFriends[i+1];
-
+			else{ //삭제할 이름으로  배열의 이름을 못 찾을경우
+				System.out.println("==삭제된 데이터가 없습니다.");
 			}
-			System.out.println("==데이터("+deleteIndex 
-					+ "번)가 삭제되었습니다==");
 		}
 		printMenu();
 	}

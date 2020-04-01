@@ -11,5 +11,11 @@ public class PhonCompanyInfo extends PhoneInfo {
 		this.company=company;
 
 	}
+	public void showPhoneInfo() {
+
+		super.showPhoneInfo();
+		System.out.println("회사:"+ company);
+		
+	}
 
 }

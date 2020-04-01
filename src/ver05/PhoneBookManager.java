@@ -1,5 +1,6 @@
 package ver05;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class PhoneBookManager {
@@ -24,9 +25,9 @@ public class PhoneBookManager {
 		System.out.println("메뉴선택>>>");
 		
 		Scanner scan = new Scanner(System.in);
-		
-		int group = scan.nextInt();
-		switch(group) {
+		try {
+			int group = scan.nextInt();
+			switch(group) {
 			case MenuItem.INPUT1 : //데이터입력	
 				System.out.println("데이터입력을 시작합니다.");
 				System.out.println("1.일반, 2.동창, 3.회사.");
@@ -45,11 +46,15 @@ public class PhoneBookManager {
 			case MenuItem.INPUT4://주소록출력
 				dataAllShow();
 				break;
-
+				
 			case MenuItem.INPUT5:
 				System.out.println("프로그램을 종료합니다.");
 				return;
-
+				
+			}
+			
+		} catch (InputMismatchException e) {
+			System.out.println(e);
 		}
 	}
 
@@ -98,6 +103,7 @@ public class PhoneBookManager {
 		default:
 			break;
 		}
+		printMenu();
 	}
 
 	

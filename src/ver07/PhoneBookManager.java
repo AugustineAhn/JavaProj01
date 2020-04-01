@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 
 public class PhoneBookManager {
-
+	Scanner scan = new Scanner(System.in);
 	String name;
 	String phone;
 	HashSet<PhoneInfo> myFriends = new HashSet<PhoneInfo>();
@@ -80,26 +80,29 @@ public class PhoneBookManager {
 	}
 
 
-	public void nameCheck(String iName) {
-
-		Iterator<PhoneInfo> itr = myFriends.iterator();
-		while(itr.hasNext()) {
-			PhoneInfo pi = itr.next();
-			Scanner scan = new Scanner(System.in);
-			
-			System.out.print("1.이름이 같습니다 덮어쓰기하실래요? 2.나가기");
+	public void nameCheck(PhoneInfo compFreind) {
+		
+		
+		if(myFriends.add(compFreind))
+			System.out.println("입력이 완료되었습니다.");
+		else {
+			System.out.print("이름이 같습니다 덮어쓰기하실래요? 1.예  2.나가기");
 			int nameCheck = scan.nextInt();
-
+			
+			
 			if(nameCheck==1) {
-				if(iName.equals(pi.name)) {
-					itr.remove();
-				}
-			}else if(nameCheck==2) {
-				printMenu();
+				myFriends.remove(compFreind);
+				myFriends.add(compFreind);
 			}
-
+			else {
+				System.out.println("취소되엇습니다.");
+				return;
+			}
+			
 		}
+		
 	}
+		
 	
 	public void dataInput(int choice7) {
 
@@ -111,36 +114,40 @@ public class PhoneBookManager {
 
 		switch (choice7) {
 		case SubMenuItem.Input1:
-			System.out.print("이름:\n");iName = scan.nextLine();
-			nameCheck(iName);
-			System.out.print("전화번호:\n");iPhone = scan.nextLine();
-
+			
+			System.out.print("이름:\n");	iName = scan.nextLine();
+			System.out.print("전화번호:\n");	iPhone = scan.nextLine();
+			
+			
 			PhoneInfo compFreind = new PhoneInfo(iName, iPhone);
-			myFriends.add(compFreind);
+			
+			nameCheck(compFreind);
+			
+				
+
+			
 			
 
 			break;
 
 		case SubMenuItem.Input2:
 			System.out.print("이름:\n");iName = scan.nextLine();
-			nameCheck(iName);
 			System.out.print("전화번호:\n");iPhone = scan.nextLine();
 			System.out.print("전공:\n"); major = scan.nextLine();
 			System.out.print("학년:\n"); year = scan.nextInt();
 
-			PhoneSchoolInfo schoolFreind = new PhoneSchoolInfo(iName, iPhone, major, year);
-			myFriends.add(schoolFreind);
+			PhoneInfo schoolFreind = new PhoneSchoolInfo(iName, iPhone, major, year);
+			nameCheck(schoolFreind);
 
 			break;
 
 		case SubMenuItem.Input3:
 			System.out.print("이름:\n");iName = scan.nextLine();
-			nameCheck(iName);
 			System.out.print("전화번호:\n");iPhone = scan.nextLine();
 			System.out.print("회사:\n"); company = scan.nextLine();
 
 			PhoneInfo companyFriend = new PhonCompanyInfo(iName, iPhone, company);
-			myFriends.add(companyFriend);
+			nameCheck(companyFriend);
 
 			break;
 
@@ -173,22 +180,22 @@ public class PhoneBookManager {
 		Iterator<PhoneInfo> itr = myFriends.iterator();
 		while(itr.hasNext()) {
 			PhoneInfo pi = itr.next();
-			if(searchName4.equals(pi.name)) {
+			if(searchName4.equals(pi.name)) {///////////////////////////
 
 				searchFlag = true;
 
-				System.out.println(pi);
+				System.out.println(pi.toString());
 			}
 		}
 
 		if(searchFlag==true) {
 			System.out.println("요청하신 정보를 찾았습니다.");
+			System.out.println("**귀하가 요청하는 정보를 찾았습니다.**");
 		}
 		else {
 			System.out.println("찾는 사람이 없어요.");
 		}
 
-		System.out.println("**귀하가 요청하는 정보를 찾았습니다.**");
 
 
 		printMenu();

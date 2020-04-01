@@ -1,45 +1,47 @@
 package ver08;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Scanner;
 
+import ver08.PhonCompanyInfo;
+import ver08.PhoneSchoolInfo;
 import ver08.PhoneInfo;;
 
 public class PhoneBookManager implements MenuItem {
-
+	Scanner scan = new Scanner(System.in);
 	String name;
 	String phone;
-	HashSet<PhoneInfo> myFriends ;
+	HashSet<PhoneInfo> myFriends = new HashSet<PhoneInfo>();
 
 
 
+	@SuppressWarnings("unchecked")
 	public PhoneBookManager() {
-		myFriends = new HashSet<PhoneInfo>();
+		//myFriends = new HashSet<PhoneInfo>();
 		try {
 			//역직렬화(복원)을 위한 스트림 생성
+			@SuppressWarnings("resource")
 			ObjectInputStream in = 
-				new ObjectInputStream(
+			new ObjectInputStream(
 					new FileInputStream("src/ver08/PhoneBook.obj")
-				);
-			
-			while(true) {
-				//저장된 파일에서 정보 1개 읽어오기
-				PhoneInfo friend = (PhoneInfo)in.readObject();
-				//만약 읽어올 정보(객체)가 더이상 없다면 루프 탈출
-				if(friend==null) break;
-				//읽어온 객체를 통해 정보출력
-				
-			}
+					);
+
+			//저장된 파일에서 정보 1개 읽어오기
+			myFriends =	(HashSet<PhoneInfo>)in.readObject();
+
+
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			System.out.println(e);
 		}
 	}
 
@@ -104,24 +106,24 @@ public class PhoneBookManager implements MenuItem {
 	}
 
 
-	public void nameCheck(String iName) {
+	public void nameCheck(PhoneInfo compFreind) {
 
-		Iterator<PhoneInfo> itr = myFriends.iterator();
-		while(itr.hasNext()) {
-			PhoneInfo pi = itr.next();
-			Scanner scan = new Scanner(System.in);
-
-			System.out.print("1.이름이 같습니다 덮어쓰기하실래요? 2.나가기");
+		if(myFriends.add(compFreind))
+			System.out.println("입력이 완료되었습니다.");
+		else {
+			System.out.print("이름이 같습니다 덮어쓰기하실래요? 1.예  2.나가기");
 			int nameCheck = scan.nextInt();
-
+			
+			
 			if(nameCheck==1) {
-				if(iName.equals(pi.name)) {
-					itr.remove();
-				}
-			}else if(nameCheck==2) {
-				printMenu();
+				myFriends.remove(compFreind);
+				myFriends.add(compFreind);
 			}
-
+			else {
+				System.out.println("취소되엇습니다.");
+				return;
+			}
+			
 		}
 	}
 
@@ -135,36 +137,37 @@ public class PhoneBookManager implements MenuItem {
 
 		switch (choice7) {
 		case SubMenuItem.Input1:
-			System.out.print("이름: \n");iName = scan.nextLine();
-			nameCheck(iName);
-			System.out.print("전화번호: \n");iPhone = scan.nextLine();
-
+			System.out.print("이름:\n");	iName = scan.nextLine();
+			System.out.print("전화번호:\n");	iPhone = scan.nextLine();
+			
+			
 			PhoneInfo compFreind = new PhoneInfo(iName, iPhone);
-			myFriends.add(compFreind);
+			
+			nameCheck(compFreind);
+			
 
 
 			break;
 
 		case SubMenuItem.Input2:
-			System.out.print("이름: \n");iName = scan.nextLine();
-			nameCheck(iName);
-			System.out.print("전화번호: \n");iPhone = scan.nextLine();
-			System.out.print("전공: \n"); major = scan.nextLine();
-			System.out.print("학년: \n"); year = scan.nextInt();
+			System.out.print("이름: ");iName = scan.nextLine();
+			System.out.print("전화번호: ");iPhone = scan.nextLine();
+			System.out.print("전공: "); major = scan.nextLine();
+			System.out.print("학년: "); year = scan.nextInt();
 
-			PhoneSchoolInfo schoolFreind = new PhoneSchoolInfo(iName, iPhone, major, year);
-			myFriends.add(schoolFreind);
+			PhoneInfo schoolFreind = new PhoneSchoolInfo(iName, iPhone, major, year);
+			nameCheck(schoolFreind);
 
 			break;
 
 		case SubMenuItem.Input3:
-			System.out.print("이름: \n");iName = scan.nextLine();
-			nameCheck(iName);
-			System.out.print("전화번호: \n");iPhone = scan.nextLine();
-			System.out.print("회사: \n"); company = scan.nextLine();
+			System.out.print("이름: ");iName = scan.nextLine();
+			System.out.print("전화번호: ");iPhone = scan.nextLine();
+			System.out.print("회사: "); company = scan.nextLine();
 
 			PhoneInfo companyFriend = new PhonCompanyInfo(iName, iPhone, company);
-			myFriends.add(companyFriend);
+			nameCheck(companyFriend);
+
 
 			break;
 
@@ -189,7 +192,7 @@ public class PhoneBookManager implements MenuItem {
 
 	public void dataSearch() {
 		Scanner scan = new Scanner(System.in);
-		System.out.print("검색할 이름을 입력하세요: \n");
+		System.out.print("검색할 이름을 입력하세요: ");
 		String searchName4 = scan.nextLine();
 
 		boolean searchFlag = false;
@@ -222,7 +225,7 @@ public class PhoneBookManager implements MenuItem {
 	public void dataDelete() {
 
 		Scanner scan = new Scanner(System.in);
-		System.out.println("삭제할 이름을 입력하세요: \n");
+		System.out.println("삭제할 이름을 입력하세요: ");
 		String deleteName4 = scan.nextLine();
 		boolean searchFlag = false;
 
@@ -249,12 +252,12 @@ public class PhoneBookManager implements MenuItem {
 					);
 
 			//myFriends 객체배열에 저장된 친구의 정보만큼 반복
-			for(PhoneInfo p : myFriends) {
-				//객체배열의 i번째 요소를 파일로 저장
-				out.writeObject(p);
-			}
-			
-			out.writeObject(null);
+			//			for(PhoneInfo p : myFriends) {
+			//				//객체배열의 i번째 요소를 파일로 저장
+			//				out.writeObject(p);
+			//			}
+			//			
+			out.writeObject(myFriends);
 			out.close();
 		}
 		catch (Exception e) {
@@ -262,9 +265,9 @@ public class PhoneBookManager implements MenuItem {
 			e.printStackTrace();
 		}		
 	}
-	
-	
-	
-	
+
+
+
+
 
 }

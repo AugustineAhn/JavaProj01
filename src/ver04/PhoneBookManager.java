@@ -104,7 +104,7 @@ public class PhoneBookManager {
 		default:
 			break;
 		}
-
+		printMenu();
 	}
 
 

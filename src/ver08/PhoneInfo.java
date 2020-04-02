@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Scanner;
 
 
+@SuppressWarnings("serial")
 public class PhoneInfo implements Serializable{
 
 	//멤버변수

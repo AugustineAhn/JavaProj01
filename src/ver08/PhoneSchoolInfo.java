@@ -1,6 +1,7 @@
 package ver08;
 
 
+@SuppressWarnings("serial")
 public class PhoneSchoolInfo extends PhoneInfo {
 
 	String major;

@@ -1,5 +1,6 @@
 package ver08;
 
+@SuppressWarnings("serial")
 public class PhonCompanyInfo extends PhoneInfo {
 
 	String company;

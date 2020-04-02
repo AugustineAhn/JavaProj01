@@ -3,6 +3,7 @@ import java.util.Scanner;
 import ver08.MenuItem;
 import ver08.PhoneBookManager;
 
+@SuppressWarnings("unused")
 public class PhoneBookVer8 {
 
 
